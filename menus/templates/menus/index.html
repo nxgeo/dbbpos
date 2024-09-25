@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Menu{% endblock %}
+{% block content %}
+    <button onclick="location.href='{% url 'cart' %}'" type="button">Cart</button>
+    <h2>Menu</h2>
+    <hr>
+    {% for category in categories %}
+        <h3>{{ category.name }}</h3>
+        <table>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+            {% for product in category.active_products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <form action="{% url 'cart' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="product-id" value="{{ product.pk }}">
+                            <button type="submit" {% if product.stock == 0 %}disabled{% endif %}>+ Cart</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                alert('{{ message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}

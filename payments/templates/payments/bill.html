@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Bill{% endblock %}
+{% block content %}
+    <h2>Bill</h2>
+    <table>
+        <tr>
+            <th>Bill ID</th>
+            <td>{{ bill.pk }}</td>
+            <td rowspan="4" style="text-align: center">
+                <div class="status-stamp {{ bill_status|lower }}">{{ bill_status|upper }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>Bill Date</th>
+            <td>{{ bill.created_at }}</td>
+        </tr>
+        <tr>
+            <th>Order ID</th>
+            <td>{{ order.pk }}</td>
+        </tr>
+        <tr>
+            <th>Bill To</th>
+            <td>{{ order.customer_name }}</td>
+        </tr>
+    </table>
+    <h3>Order Details</h3>
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+        {% for order_item in order_items %}
+            <tr>
+                <td>{{ order_item.product.name }}</td>
+                <td>{{ order_item.product.price }}</td>
+                <td>{{ order_item.quantity }}</td>
+                <td>{{ order_item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h3>Total: {{ total_amount }}</h3>
+    <hr>
+    <h3>Payment Method</h3>
+    <p>{{ payment_method|upper }}</p>
+    <br>
+    <p><i>Please make your payment at the cashier. Don't forget to bring this bill with you.</i></p>
+{% endblock %}

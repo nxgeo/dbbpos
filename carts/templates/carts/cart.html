@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+    <button onclick="location.href='{% url 'index' %}'" type="button">Menu</button>
+    <h2>Cart</h2>
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        {% for cart_item in cart_items %}
+            <tr>
+                <td>{{ cart_item.product.name }}</td>
+                <td>{{ cart_item.product.price }}</td>
+                <td>{{ cart_item.quantity }}</td>
+                <td>
+                    <form action="{% url 'cart' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="delete">
+                        <input type="hidden" name="cart-item-id" value="{{ cart_item.pk }}">
+                        <button type="submit">- Cart</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h3>Total: {{ cart_total }}</h3>
+    <form action="{% url 'checkout' %}" method="get">
+        <input type="hidden" name="cart-id" value="{{ cart_id }}">
+        <button type="submit">Proceed to Checkout</button>
+    </form>
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                alert('{{ message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}
